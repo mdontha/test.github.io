@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Meghan Dontha">
 
-<title>Pelham Lab Screener Documentation – Pelham Lab’s Screener Creation Tools</title>
+<title>Documentation – Pelham Lab’s Screener Creation Tools</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -89,7 +90,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -101,7 +102,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Metadata Download</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./documentation.html"> 
+    <a class="nav-link active" href="./documentation.html" aria-current="page"> 
 <span class="menu-text">Documentation</span></a>
   </li>  
 </ul>
@@ -120,7 +121,21 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#table" id="toc-table" class="nav-link" data-scroll-target="#table">table</a></li>
+  <li><a href="#variable" id="toc-variable" class="nav-link" data-scroll-target="#variable">variable</a></li>
+  <li><a href="#label" id="toc-label" class="nav-link" data-scroll-target="#label">label</a></li>
+  <li><a href="#abcd_notes" id="toc-abcd_notes" class="nav-link" data-scroll-target="#abcd_notes">abcd_notes</a></li>
+  <li><a href="#condition" id="toc-condition" class="nav-link" data-scroll-target="#condition">condition</a></li>
+  <li><a href="#has_skip_logic" id="toc-has_skip_logic" class="nav-link" data-scroll-target="#has_skip_logic">has_skip_logic</a></li>
+  <li><a href="#type" id="toc-type" class="nav-link" data-scroll-target="#type">type</a></li>
+  <li><a href="#sensitivity-come-back-when-review-finalized" id="toc-sensitivity-come-back-when-review-finalized" class="nav-link" data-scroll-target="#sensitivity-come-back-when-review-finalized">sensitivity – come back when review finalized</a></li>
+  <li><a href="#informant" id="toc-informant" class="nav-link" data-scroll-target="#informant">informant</a></li>
+  <li><a href="#plab_facet" id="toc-plab_facet" class="nav-link" data-scroll-target="#plab_facet">plab_facet</a></li>
+  <li><a href="#plab_subfacet" id="toc-plab_subfacet" class="nav-link" data-scroll-target="#plab_subfacet">plab_subfacet</a></li>
+  <li><a href="#alexsa_facet" id="toc-alexsa_facet" class="nav-link" data-scroll-target="#alexsa_facet">alexsa_facet</a></li>
+  <li><a href="#alexsa_facet_secondary" id="toc-alexsa_facet_secondary" class="nav-link" data-scroll-target="#alexsa_facet_secondary">alexsa_facet_secondary</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
   </ul>
 </nav>
     </div>
@@ -129,13 +144,19 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Pelham Lab Screener Documentation</h1>
+<h1 class="title">Documentation</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Meghan Dontha </p>
+          </div>
+  </div>
     
   
     
@@ -146,9 +167,103 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="welcome" class="level2">
-<h2 class="anchored" data-anchor-id="welcome">Welcome</h2>
-<p>This is the website for navigating the Pelham Lab Screener Dataset, a tool for building screeners with the Adolescent Brain Cognitive Development (ABCD) study dataset.</p>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>This is a user’s guide to navigating the Pelham Lab’s ABCD metadata spreadsheet (metadata-xvars.xlsx). The spreadsheet contains several columns meant to help navigate the ABCD dataset while working in R or similar statistical programming languages.</p>
+</section>
+<section id="table" class="level2">
+<h2 class="anchored" data-anchor-id="table">table</h2>
+<p>The items within the table column refer to ABCD tables, collections of grouped ABCD variables. Datapoints from the same table were administered and/or collected together. Table names are typically made up of three short phrases indicating ABCD domain, informant, and some form of abbreviation for the name of the instrument administered. For more information on the ABCD tables, see <a href="https://wiki.abcdstudy.org/release-notes/start-page.html">ABCD Release Notes</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/table-abcd.png" class="img-fluid figure-img"></p>
+<figcaption>Here we can see that this table is part of the <a href="https://wiki.abcdstudy.org/release-notes/non-imaging/general.html">ABCD (General) domain</a>, was completed by the parent, and is a demographics survey.</figcaption>
+</figure>
+</div>
+</section>
+<section id="variable" class="level2">
+<h2 class="anchored" data-anchor-id="variable">variable</h2>
+<p>The items within the variable column are unique variables that can either be found in the ABCD data set or were created by the Pelham Lab @ UCSD through manipulating variables from the ABCD data set. If a variable belongs to the ABCD data set, you may look it up in the <a href="https://data-dict.abcdstudy.org/?">ABCD Data Dictionary</a>. If a variable was created by members of the Pelham Lab, you will not be able to find it in the ABCD Data Dictionary.</p>
+<p>Variables can contain information about the type of instrument (e.g.&nbsp;demographics) and a number indicating the order it appears in the instrument.</p>
+<p><img src="images/variable.png" class="img-fluid" width="299"></p>
+<p>Data pertaining to the same variable can be separated into baseline and longitudinal variables. Longitudinal variables and baseline variables appear the same except for the “_l” suffix at the end of the variable name.</p>
+<p><img src="images/longitudinal-variables.png" class="img-fluid" width="300"></p>
+</section>
+<section id="label" class="level2">
+<h2 class="anchored" data-anchor-id="label">label</h2>
+<p>The items under the label column tell us what the variables measured in more detail. In the case of survey variables, for example, the label is the question as presented to the respondent. All labels are copied exactly from the <a href="https://data-dict.abcdstudy.org/?">ABCD Data Dictionary</a>. Labels for variables created by the Pelham Lab will provide a description of the manipulated variable.<img src="images/label-spanish.png" class="img-fluid" alt="label column items: For survey data the label shows us the question as presented to the respondent"></p>
+<p>Here we can see the label provides both the questions as presented in the default English and, for those who indicated a preference for Spanish, the questions presented in Spanish after the backslash.</p>
+</section>
+<section id="abcd_notes" class="level2">
+<h2 class="anchored" data-anchor-id="abcd_notes">abcd_notes</h2>
+<p>The abcd_notes column in our metadata encompasses the entirety of the “Notes” column in the <a href="https://data-dict.abcdstudy.org/?">ABCD Dictionary</a>. Often, the abcd_notes column provides information on how to interpret the numeric responses to the question. Alternatively, it may instead contain information about site location or administration method.</p>
+<p><img src="images/abcd-notes.png" class="img-fluid" width="1648"></p>
+<p>Above we can see several rows of abcd_notes that equate numeric responses like 0 and 1 to binary responses like <em>No</em> and <em>Yes</em>, but they can also correspond to multiple choice responses, as is the case in the row depicting marital status on a scale of 1-5.</p>
+</section>
+<section id="condition" class="level2">
+<h2 class="anchored" data-anchor-id="condition">condition</h2>
+<p>The condition column in metadata-xvars encompasses the entirety of the condition column from the <a href="https://data-dict.abcdstudy.org/?">ABCD Data Dictionary</a>. It usually indicates the skip logic of the associated variable, such that the variable is only presented to respondents who answered a previous question in a certain way.</p>
+<p><img src="images/label.png" class="img-fluid"></p>
+<p>For example, here we can see that the condition column (right column) indicates that these items have skip logic where the associated variables – questions about what race(s) the informant identifies as – are only presented to respondents if their response to “event_name” was coded as 11.</p>
+</section>
+<section id="has_skip_logic" class="level2">
+<h2 class="anchored" data-anchor-id="has_skip_logic">has_skip_logic</h2>
+<p>A binary accompanying column to the condition column, the has_skip_logic column indicates the presence, or lack there of, of skip logic in the associated variable with a ‘yes’ or ‘no’. Variables without skip logic are presented to every applicable participant, whereas those with skip logic are only presented to participants who responded in a certain way to a previous question.</p>
+<p><img src="images/has-skip-logic.png" class="img-fluid" width="154"></p>
+</section>
+<section id="type" class="level2">
+<h2 class="anchored" data-anchor-id="type">type</h2>
+<p>While all of the variables in ABCD are of clinical importance, not all of them are questions that are useful to ask a general audience*<strong>ww</strong>*. Thus, many ABCD variables would not provide much value to a short screener where questions should be applicable to a general audience. <strong><em>workshop this</em></strong></p>
+<p><img src="images/type-item-vs-na.png" class="img-fluid"></p>
+<p>Here we can see that questions about English fluency and multilingualism are applicable to a general audience, but that questions narrowing in on these previous questions, such as questions about dialects and frequency of non-English language use are not questions that can be presented to a general audience without first being primed with another question about the topic – making their inclusion in a screener highly infeasible. <strong>workshop to make more concise</strong></p>
+<p><img src="images/type.png" class="img-fluid" width="161"></p>
+<p>Therefore, the type column helps us sort by which variables are items that can be included on a questionnaire – item – and which variables are not – score_from_item or N/A.</p>
+<p><img src="images/filter-by-type.png" class="img-fluid" width="400"></p>
+<p>If you are interested in navigating only by item or navigating other types of variables, there is an option to filter the metadata spreadsheet by type.</p>
+</section>
+<section id="sensitivity-come-back-when-review-finalized" class="level2">
+<h2 class="anchored" data-anchor-id="sensitivity-come-back-when-review-finalized">sensitivity – come back when review finalized</h2>
+</section>
+<section id="informant" class="level2">
+<h2 class="anchored" data-anchor-id="informant">informant</h2>
+<p>The informant column allows us to quickly tell who the respondent/subject was. There are three possible informants: parent, youth, and teacher.</p>
+<p><img src="images/informant.png" class="img-fluid"></p>
+<p>Many questions asking the same thing about the child are presented to different informants, so keeping track of exactly who is answering these questions is important when creating screeners meant for specific informants.</p>
+<p><img src="images/label-informant-parent.png" class="img-fluid" width="603"></p>
+<p><img src="images/label-plus-informant-youth.png" width="604" height="47"></p>
+<p>Above, we can see the same question about the child’s truancy from school is presented to two different informants with only a slight variation in wording.</p>
+<p><img src="images/filter-by-informant.png" class="img-fluid" width="350"></p>
+<p>It is possible to filter the spreadsheet by informant to show only items from parties we are interested in screening.</p>
+</section>
+<section id="plab_facet" class="level2">
+<h2 class="anchored" data-anchor-id="plab_facet">plab_facet</h2>
+<p>The plab_facet is a sorting system specifically made to sort the items in the ABCD metadata. The plab_facet was created and reviewed by members of the Pelham Lab @ UCSD. The <a href="https://wiki.abcdstudy.org/release-notes/start-page.html">ABCD Release Notes</a> categories were considered in the creation of domains, but were expanded upon or made more specific in order to classify all screening-relevant items.</p>
+<p><img src="images/plab-facet.png" class="img-fluid" width="204"></p>
+<p>Every single variable of type “item” was sorted into a domain in the plab_facet.</p>
+<p><img src="images/filter-by-plab-facet.png" class="img-fluid" width="378"></p>
+<p>To filter by a domain of interest, click the dropdown menu at the top of the plab_facet column and select your domain of interest.</p>
+</section>
+<section id="plab_subfacet" class="level2">
+<h2 class="anchored" data-anchor-id="plab_subfacet">plab_subfacet</h2>
+<p>Subdomains were created and reviewed alongside the domains in plab_facet by members of the Pelham Lab @ UCSD. Subdomains were only created when clear and necessary categories within domains emerged such that all items in a domain could fall into a subdomain of at least three items.</p>
+<p><img src="images/plab-subfacet.png" class="img-fluid" width="282" alt="plab_subfacet column items"> <img src="images/filter-by-subfacet.png" class="img-fluid" width="312" alt="filter by plab_subfacet"></p>
+<p>Subdomains are meant to provide further classification within domains in the plab_facet column. Thus, once the plab_facet has been filtered to the desired domain(s), you may filter even further by subdomains by clicking on the dropdown menu at the top of the plab_subfacet column and selecting your subdomain(s) of interest.</p>
+<p><img src="images/plab-facet-subfacet-side-by-side.png" class="img-fluid" width="418"></p>
+<p>Some plab_facet domains, however, do not have any associated subdomains in the plab_subfacet. If this is the case, the column plab_subfacet should only contain “not applicable”.</p>
+</section>
+<section id="alexsa_facet" class="level2">
+<h2 class="anchored" data-anchor-id="alexsa_facet">alexsa_facet</h2>
+<p>The alexsa_facet utilizes the subscales from the Assessment of Liability and EXposure to Substance use and Antisocial behavior for Children (ALEXSA) assessment (Ridenour et al., 2009). The ALEXSA assessment is a child report assessment for predictors of early onset substance abuse and for antisocial behavior.</p>
+<p><img src="images/alexsa-facet.png" class="img-fluid" width="243"></p>
+<p>Items presented in the original ALEXSA assessment fell into one of 34 unique subscales – all of which are domains in the alexsa_facet. At least two lab members were involved in sorting items and reviewing their placement into specific subscales within the alexsa_facet.</p>
+<p><img src="images/filter-by-alexsa-facet-01.png" class="img-fluid" width="313"></p>
+<p>Users can filter by ALEXSA subscale by clicking on the dropdown menu at the top of the alexsa_facet column and and selecting their subscale(s) of interest.</p>
+</section>
+<section id="alexsa_facet_secondary" class="level2">
+<h2 class="anchored" data-anchor-id="alexsa_facet_secondary">alexsa_facet_secondary</h2>
+</section>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
 
 
 </section>

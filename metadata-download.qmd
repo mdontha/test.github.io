@@ -1,0 +1,8 @@
+---
+title: "Metadata Download"
+editor: visual
+---
+
+Here is a link \*\*\* to the metadata-xvars.xlsx for the creation of screeners – to be used in tandem with ABCD data.
+
+A team of three Pelham Lab staff sorted and reviewed all of the variables in the ABCD dataset. Each variable sorted into the "item" type faced review by two other Pelham Lab staff.

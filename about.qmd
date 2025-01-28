@@ -2,8 +2,22 @@
 title: "About"
 ---
 
-About this site
+This is a website to help navigate the Pelham Lab \@ UCSD's screener creation tools for the Adolescent Brain Cognitive Development (ABCD) dataset.
 
-```{r}
-1 + 1
-```
+### Contributers
+
+William Pelham
+
+Isabel Aks
+
+Isabella Davis
+
+Meghan Dontha
+
+Athena Nooney
+
+etc.
+
+### Contact Us
+
+Inquiries can be directed to Dr. Pelham at \<wpelham at ucsd dot edu\>
