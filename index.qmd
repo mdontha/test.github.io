@@ -1,11 +1,7 @@
 ---
-title: "test.github.io"
+title: "Pelham Lab Screener Documentation"
 ---
 
-This is a Quarto website.
+## Welcome
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
-```
+This is the website for navigating the Pelham Lab Screener Dataset, a tool for building screeners with the Adolescent Brain Cognitive Development (ABCD) study dataset.
