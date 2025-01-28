@@ -4,7 +4,7 @@ title: "About"
 
 This is a website to help navigate the Pelham Lab \@ UCSD's screener creation tools for the Adolescent Brain Cognitive Development (ABCD) dataset.
 
-### Contributers
+### Contributors
 
 William Pelham
 
