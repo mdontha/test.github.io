@@ -6,24 +6,24 @@ runtime: shiny
 ---
 
 ```{r, echo=FALSE}
-library(tidyverse)
-library(shiny)
-library(sack2)
-library(DT)
-# load csv file
-zz.alexsa.facets <- read_csv("metadata-alexsa-subscales.csv") %>%
-  .[["subscale"]]
-
 suppressWarnings({
   suppressMessages({
-    metadata.xvars <- readxl::read_excel("metadata-xvars.xlsx", guess_max = 1e6, col_types = "text")
+    library(tidyverse)
+    library(shiny)
+    library(sack2)
+    library(DT)
+    
+    # load csv file
+    zz.alexsa.facets <- read_csv("metadata-alexsa-subscales.csv") %>%
+      .[["subscale"]]
+    metadata.xvars <- readxl::read_excel("metadata-xvars.xlsx", guess_max = 1e6) %>% 
+      mutate(alexsa_facet = factor(alexsa_facet,
+                                   levels = zz.alexsa.facets))
+    
+    initial_rows <- min(nrow(metadata.xvars), 1000)
+    metadata.xvars <- metadata.xvars[1:initial_rows, ]
   })
 })
-  
-  metadata.xvars <- metadata.xvars %>% 
-    mutate(alexsa_facet = factor(alexsa_facet,
-                                 levels = zz.alexsa.facets))
-
 
 
 # UI
@@ -38,7 +38,9 @@ server <- function(input, output, session) {
                                       options = list (pageLength = 10,
                                       server = TRUE, # server-side processing
                                       scrollX = TRUE, # enables horizontal scrolling
-                                                     searchHighlight = TRUE),
+                                      processing = TRUE,
+                                      deferRender = TRUE,
+                                      searchHighlight = TRUE),
                                       filter = "top")
   }, server = TRUE) # activate server-side processing
 }
