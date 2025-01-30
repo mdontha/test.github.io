@@ -14,10 +14,17 @@ library(DT)
 zz.alexsa.facets <- read_csv("metadata-alexsa-subscales.csv") %>%
   .[["subscale"]]
 
-metadata.xvars <- readxl::read_excel("metadata-xvars.xlsx",
-                                     guess_max = 1e6) %>%
-  mutate(alexsa_facet = factor(alexsa_facet,
-                               levels = zz.alexsa.facets))
+suppressWarnings({
+  suppressMessages({
+    metadata.xvars <- readxl::read_excel("metadata-xvars.xlsx", guess_max = 1e6, col_types = "text")
+  })
+})
+  
+  metadata.xvars <- metadata.xvars %>% 
+    mutate(alexsa_facet = factor(alexsa_facet,
+                                 levels = zz.alexsa.facets))
+
+
 
 # UI
 ui <- fluidPage(
@@ -28,17 +35,15 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   # render the table with server-side processing
   output$table <- renderDT({datatable(metadata.xvars,
-                                      options = list(pageLength = 10,
-                                                     server = TRUE, # server-side processing
-                                                     scrollX = TRUE, # enables horizontal scrolling
+                                      options = list (pageLength = 10,
+                                      server = TRUE, # server-side processing
+                                      scrollX = TRUE, # enables horizontal scrolling
                                                      searchHighlight = TRUE),
                                       filter = "top")
   }, server = TRUE) # activate server-side processing
 }
 
 shinyApp(ui, server)
-
-
 ```
 
 ### Download Full Metadata
