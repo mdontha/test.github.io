@@ -1,52 +1,11 @@
 ---
 title: "Metadata Explorer"
-editor: visual
 format: html
-runtime: shiny
 ---
-
-```{r, echo=FALSE}
-suppressWarnings({
-  suppressMessages({
-    library(tidyverse)
-    library(shiny)
-    library(sack2)
-    library(DT)
-    
-    # load csv file
-    zz.alexsa.facets <- read_csv("metadata-alexsa-subscales.csv") %>%
-      .[["subscale"]]
-    metadata.xvars <- readxl::read_excel("metadata-xvars.xlsx", guess_max = 1e6) %>% 
-      mutate(alexsa_facet = factor(alexsa_facet,
-                                   levels = zz.alexsa.facets))
-    
-    initial_rows <- min(nrow(metadata.xvars), 1000)
-    metadata.xvars <- metadata.xvars[1:initial_rows, ]
-  })
-})
+<iframe src="https://mdontha.shinyapps.io/shiny_app/"
+        width="100%" height="800px" style="border:none;"></iframe> 
 
 
-# UI
-ui <- fluidPage(
-  DTOutput("table") # display interactive table
-)
-
-# server
-server <- function(input, output, session) {
-  # render the table with server-side processing
-  output$table <- renderDT({datatable(metadata.xvars,
-                                      options = list (pageLength = 10,
-                                      server = TRUE, # server-side processing
-                                      scrollX = TRUE, # enables horizontal scrolling
-                                      processing = TRUE,
-                                      deferRender = TRUE,
-                                      searchHighlight = TRUE),
-                                      filter = "top")
-  }, server = TRUE) # activate server-side processing
-}
-
-shinyApp(ui, server)
-```
 
 ### Download Full Metadata
 
