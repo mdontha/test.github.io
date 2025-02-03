@@ -38,19 +38,19 @@ ui <- fluidPage(
 server <- function(input, output, session){
   # update dropdown choices
   observe({
-    updateSelectizeInput(session, "type_filter", choices = unique(metadata.xvars$type),
+    updateSelectizeInput(session, "type_filter", choices = unique(na.omit(metadata.xvars$type)),
                              selected = "")
-    updateSelectizeInput(session, "sensitivity_filter", choices = unique(metadata.xvars$sensitivity),
+    updateSelectizeInput(session, "sensitivity_filter", choices = unique(na.omit(metadata.xvars$sensitivity)),
                       selected = "")
-    updateSelectizeInput(session, "informant_filter", choices = unique(metadata.xvars$informant),
+    updateSelectizeInput(session, "informant_filter", choices = unique(na.omit(metadata.xvars$informant)),
                       selected = "")
-    updateSelectizeInput(session, "plab_facet_filter", choices = unique(metadata.xvars$plab_facet),
+    updateSelectizeInput(session, "plab_facet_filter", choices = unique(na.omit(metadata.xvars$plab_facet)),
                       selected = "")
-    updateSelectizeInput(session, "plab_subfacet_filter", choices = unique(metadata.xvars$plab_subfacet),
+    updateSelectizeInput(session, "plab_subfacet_filter", choices = unique(na.omit(metadata.xvars$plab_subfacet)),
                       selected = "")
-    updateSelectizeInput(session, "alexsa_facet_filter", choices = unique(metadata.xvars$alexsa_facet),
+    updateSelectizeInput(session, "alexsa_facet_filter", choices = unique(na.omit(metadata.xvars$alexsa_facet)),
                       selected = "")
-    updateSelectizeInput(session, "alexsa_facet_secondary_filter", choices = unique(metadata.xvars$alexsa_facet_secondary),
+    updateSelectizeInput(session, "alexsa_facet_secondary_filter", choices = unique(na.omit(metadata.xvars$alexsa_facet_secondary)),
                       selected = "")
     })
   
