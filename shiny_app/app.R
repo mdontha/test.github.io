@@ -86,18 +86,3 @@ server <- function(input, output, session){
                                       options = list(pageLength = 10))})
 }
 shinyApp(ui = ui, server = server)
-# # server
-# server <- function(input, output, session) {
-#   # render the table with server-side processing
-#   output$table <- renderDT({datatable(metadata.xvars,
-#                                       options = list (pageLength = 10,
-#                                                       server = TRUE, # server-side processing
-#                                                       scrollX = TRUE, # enables horizontal scrolling
-#                                                       processing = TRUE,
-#                                                       deferRender = TRUE,
-#                                                       searchHighlight = TRUE),
-#                                       filter = "top")
-#   }, server = TRUE) # activate server-side processing
-# }
-# 
-# shinyApp(ui, server)
