@@ -57,25 +57,25 @@ server <- function(input, output, session){
   # reactive dataset based on filters
   filtered_data <- reactive({
     df <- metadata.xvars
-    if(!is.null(input$type_filter) && input$type_filter != ""){
-      df <- df[df$type %in% input$type_filter, ]
+    if(!is.null(input$type_filter) && length(input$type_filter > 0)){
+      df <- df[df$type %in% input$type_filter, , drop = FALSE]
     }
-    if(!is.null(input$sensitivity_filter) && input$sensitivity_filter != ""){
+    if(!is.null(input$sensitivity_filter) && length(input$sensitivity_filter > 0)){
       df <- df[df$sensitivity %in% input$sensitivity_filter, , drop = FALSE]
     }
-    if(!is.null(input$informant_filter) && input$informant_filter != ""){
+    if(!is.null(input$informant_filter) && length(input$informant_filter > 0)){
       df <- df[df$informant %in% input$informant_filter, , drop = FALSE]
     }
-    if(!is.null(input$plab_facet_filter) && input$plab_facet_filter != ""){
+    if(!is.null(input$plab_facet_filter) && length(input$plab_facet_filter > 0)){
       df <- df[df$plab_facet %in% input$plab_facet_filter, , drop = FALSE]
     }
-    if(!is.null(input$plab_subfacet_filter) && input$plab_subfacet_filter != ""){
+    if(!is.null(input$plab_subfacet_filter) && length(input$plab_subfacet_filter > 0)){
       df <- df[df$plab_subfacet %in% input$plab_subfacet_filter, , drop = FALSE]
     }
-    if(!is.null(input$alexsa_facet_filter) && input$alexsa_facet_filter != ""){
+    if(!is.null(input$alexsa_facet_filter) && length(input$alexsa_facet_filter > 0)){
       df <- df[df$alexsa_facet %in% input$alexsa_facet_filter, , drop = FALSE]
     }
-    if(!is.null(input$alexsa_facet_secondary_filter) && input$alexsa_facet_secondary_filter != ""){
+    if(!is.null(input$alexsa_facet_secondary_filter) && length(input$alexsa_facet_secondary_filter > 0)){
       df <- df[df$alexsa_facet_secondary %in% input$alexsa_facet_secondary_filter, , drop = FALSE]
     }
     return(df)
