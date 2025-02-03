@@ -3,6 +3,7 @@ suppressWarnings({
     library(tidyverse)
     library(shiny)
     library(sack2)
+    library(rsconnect)
     library(DT)
     
     # load csv file
@@ -60,22 +61,22 @@ server <- function(input, output, session){
       df <- df[df$type %in% input$type_filter, ]
     }
     if(!is.null(input$sensitivity_filter) && input$sensitivity_filter != ""){
-      df <- df[df$sensitivity %in% input$sensitivity_filter, ]
+      df <- df[df$sensitivity %in% input$sensitivity_filter, , drop = FALSE]
     }
     if(!is.null(input$informant_filter) && input$informant_filter != ""){
-      df <- df[df$informant %in% input$informant_filter, ]
+      df <- df[df$informant %in% input$informant_filter, , drop = FALSE]
     }
     if(!is.null(input$plab_facet_filter) && input$plab_facet_filter != ""){
-      df <- df[df$plab_facet %in% input$plab_facet_filter, ]
+      df <- df[df$plab_facet %in% input$plab_facet_filter, , drop = FALSE]
     }
     if(!is.null(input$plab_subfacet_filter) && input$plab_subfacet_filter != ""){
-      df <- df[df$plab_subfacet %in% input$plab_subfacet_filter, ]
+      df <- df[df$plab_subfacet %in% input$plab_subfacet_filter, , drop = FALSE]
     }
     if(!is.null(input$alexsa_facet_filter) && input$alexsa_facet_filter != ""){
-      df <- df[df$alexsa_facet %in% input$alexsa_facet_filter, ]
+      df <- df[df$alexsa_facet %in% input$alexsa_facet_filter, , drop = FALSE]
     }
     if(!is.null(input$alexsa_facet_secondary_filter) && input$alexsa_facet_secondary_filter != ""){
-      df <- df[df$alexsa_facet_secondary %in% input$alexsa_facet_secondary_filter, ]
+      df <- df[df$alexsa_facet_secondary %in% input$alexsa_facet_secondary_filter, , drop = FALSE]
     }
     return(df)
     
