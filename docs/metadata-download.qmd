@@ -1,0 +1,12 @@
+---
+title: "Screener Metadata"
+format: html
+---
+
+<iframe src="https://mdontha.shinyapps.io/shiny_app/" width="150%" height="1500px" style="border:none;">
+
+</iframe>
+
+### Download Full Metadata
+
+Here is a [link \*\*\*](https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf)to the metadata-xvars.csv for the creation of predictive screening tools. This metadata is to be used in tandem with the Adolescent Brain Cognitive Development (ABCD) Study data.
