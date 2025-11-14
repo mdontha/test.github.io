@@ -7,14 +7,38 @@ suppressWarnings({
     library(DT)
     
     # load csv file
-    zz.alexsa.facets <- read_csv("metadata-alexsa-subscales.csv") %>%
-      .[["subscale"]]
-    metadata.xvars <- readxl::read_excel("metadata-xvars.xlsx", guess_max = 1e6) %>% 
-      mutate(alexsa_facet = factor(alexsa_facet,
-                                   levels = zz.alexsa.facets))
+    metadata.xvars <- read.csv(path_to_metadata_xvars) 
   }) 
 })
 
+# mapping facets -> subfacets
+facet_map <- list(
+  "caregiver physical health"         = "caregiver physical health",
+  "caregiver psychopathology"         = c("externalizing", "internalizing", "other psychopathology"),
+  "caregiver screen time"             = "not applicable",
+  "demographics"                      = c("age", "education attained", "health insurance", "household structure", "income",
+                                          "language", "pet ownership", "relatives"),
+  "developmental history"             = "not applicable",
+  "driving"                           = "not applicable",
+  "emotion and emotion regulation"    = "not applicable",
+  "family interactions and parenting" = "not applicable",
+  "genetics and family history"       = "not applicable",
+  "hobbies and activities"            = "not applicable",
+  "identities"                        = c("race and ethnicity", "sex and gender", "sexual orientation", "country"),
+  "life events"                       = "not applicable",
+  "neighborhood"                      = "not applicable",
+  "parent perceived stress"           = "not applicable",
+  "peers and peer relationships"      = c("mistreatment by peers", "mistreats peers", "prosociality of peers",
+                                          "protective peer relationships", "quality relationships", "quantity of friends",
+                                          "susceptibility to peer pressure"),
+  "physical health"                   = c("anthropometrics", "diet/eating", "exercise", "pain/illness/injury", "puberty", "sleep"),
+  "prosocial behavior"                = "not applicable",
+  "religious and/or cultural values"  = "not applicable",
+  "school"                            = "not applicable",
+  "screen time"                       = "not applicable",
+  "service utilization"               = "not applicable",
+  "substance use"                     = c("access", "exposure", "cognitions", "personal use")
+)
 
 # UI
 ui <- fluidPage(
@@ -22,67 +46,129 @@ ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      selectizeInput("type_filter", "Select Type:", choices = NULL, selected = "", multiple = TRUE),
-      selectizeInput("sensitivity_filter", "Select Sensitivity:", choices = NULL, selected = "", multiple = TRUE),
-      selectizeInput("informant_filter", "Select Informant:", choices = NULL, selected = "", multiple = TRUE),
-      selectizeInput("plab_facet_filter", "Select Pelham Lab Facet:", choices = NULL, selected = "", multiple = TRUE),
-      selectizeInput("plab_subfacet_filter", "Select Pelham Lab Subfacet:", choices = NULL, selected = "", multiple = TRUE),
-      selectizeInput("alexsa_facet_filter", "Select ALEXSA Facet:", choices = NULL, selected = "", multiple = TRUE),
-      selectizeInput("alexsa_facet_secondary_filter", "Select Secondary ALEXSA Facet:", choices = NULL, selected = "", multiple = TRUE)
-    ),
+      selectizeInput("study_filter", "Select Study:", choices = NULL, selected = NULL, multiple = TRUE),
+      selectizeInput("domain_filter", "Select Domain:", choices = NULL, selected = NULL, multiple = TRUE),
+      selectizeInput("subdomain_filter", "Select Subdomain:", choices = NULL, selected = NULL, multiple = TRUE),
+      selectizeInput("source_filter", "Select Source:", choices = NULL, selected = NULL, multiple = TRUE),
+      selectizeInput("table_name_filter", "Select Table:", choices = NULL, selected = NULL, multiple = TRUE),
+      selectizeInput("has_branching_logic_filter", "Select Branching Logic:", choices = NULL, selected = NULL, multiple = TRUE),
+      selectizeInput("sensitivity_filter", "Select Sensitivity:", choices = NULL, selected = NULL, multiple = TRUE),
+      selectizeInput("plab_facet_filter", "Select Pelham Lab Facet:", choices = NULL, selected = NULL, multiple = TRUE),
+      selectizeInput("plab_subfacet_filter", "Select Pelham Lab Subfacet:", choices = NULL, selected = NULL, multiple = TRUE, 
+                     options = list(placeholder = "Choose a Pelham Lab Facet first")),
+      selectizeInput("alexsa_facet_filter", "Select ALEXSA Facet:", choices = NULL, selected = NULL, multiple = TRUE)),
     mainPanel(DTOutput("table")
               )
             )
           )
 # server
 server <- function(input, output, session){
+  facet_map <- lapply(facet_map, function(x) {
+    if (is.null(x)) return(character(0))
+    as.character(x)
+  })
+  
   # update dropdown choices
   observe({
-    updateSelectizeInput(session, "type_filter", choices = unique(na.omit(metadata.xvars$type)),
-                             selected = "")
+    updateSelectizeInput(session, "study_filter", choices = unique(na.omit(metadata.xvars$study)),
+                         selected = character(0))
+    updateSelectizeInput(session, "domain_filter", choices = unique(na.omit(metadata.xvars$domain)),
+                         selected = character(0))
+    updateSelectizeInput(session, "subdomain_filter", choices = unique(na.omit(metadata.xvars$sub_domain)),
+                         selected = character(0))
+    updateSelectizeInput(session, "source_filter", choices = unique(na.omit(metadata.xvars$source)),
+                         selected = character(0))
+    updateSelectizeInput(session, "table_name_filter", choices = unique(na.omit(metadata.xvars$table_name)),
+                         selected = character(0))
+    updateSelectizeInput(session, "has_branching_logic_filter", choices = unique(na.omit(metadata.xvars$has_skip_logic)),
+                         selected = character(0))
     updateSelectizeInput(session, "sensitivity_filter", choices = unique(na.omit(metadata.xvars$sensitivity)),
-                      selected = "")
-    updateSelectizeInput(session, "informant_filter", choices = unique(na.omit(metadata.xvars$informant)),
-                      selected = "")
-    updateSelectizeInput(session, "plab_facet_filter", choices = unique(na.omit(metadata.xvars$plab_facet)),
-                      selected = "")
-    updateSelectizeInput(session, "plab_subfacet_filter", choices = unique(na.omit(metadata.xvars$plab_subfacet)),
-                      selected = "")
+                      selected = character(0))
     updateSelectizeInput(session, "alexsa_facet_filter", choices = unique(na.omit(metadata.xvars$alexsa_facet)),
-                      selected = "")
-    updateSelectizeInput(session, "alexsa_facet_secondary_filter", choices = unique(na.omit(metadata.xvars$alexsa_facet_secondary)),
-                      selected = "")
+                      selected = character(0))
+    
+    # ----- use facet_map directly for plab_facet choices ---
+    updateSelectizeInput(session, "plab_facet_filter",
+                         choices = sort(names(facet_map)),
+                         selected = character(0))
+    
+    # start plab_subfacet empty (will be filled based on facet selection)
+    updateSelectizeInput(session, "plab_subfacet_filter",
+                         choices = character(0),
+                         selected = character(0))
     })
+  
+  # --- update subfacet choices when facet seletion changes using facet_map
+  observeEvent(input$plab_facet_filter, {
+    sel_facets <- input$plab_facet_filter
+    
+    if(is.null(sel_facets) || length(sel_facets) == 0){
+      # nothing selected -> clear subfacet choices
+      updateSelectizeInput(session, "plab_subfacet_filter",
+                           choices = character(0),
+                           selected = character(0))
+    } else{
+      # gather subfacets from facet_map for the selected facets
+      matched <- facet_map[ intersect(names(facet_map), sel_facets)  ]
+      new_choices <- sort(unique(unlist(matched, use.names = FALSE)))
+      
+      # preserve any currently-selected subfacets 
+      current_sel <- isolate(input$plab_subfacet_filter)
+      preserved <- if (!is.null(current_sel)) intersect(current_sel, new_choices) else character(0)
+      
+      updateSelectizeInput(session, "plab_subfacet_filter",
+                           choices = new_choices,
+                           selected = preserved)
+    }
+  }, ignoreNULL = FALSE) # run once to initialize empty subfacet
+  
+  # ---- if user opens subfacet before selecting facets  ----
+  observeEvent(input$plab_subfacet_filter, {
+    # do nothing here — we only react when plab_facet_filter changes
+    # (keeps behavior simple)
+  })
   
   # reactive dataset based on filters
   filtered_data <- reactive({
     df <- metadata.xvars
-    if(!is.null(input$type_filter) && length(input$type_filter > 0)){
-      df <- df[df$type %in% input$type_filter, , drop = FALSE]
+    if (!is.null(input$study_filter) && length(input$study_filter) > 0) {
+      df <- df[df$study %in% input$study_filter, , drop = FALSE]
     }
-    if(!is.null(input$sensitivity_filter) && length(input$sensitivity_filter > 0)){
+    if (!is.null(input$domain_filter) && length(input$domain_filter) > 0) {
+      df <- df[df$domain %in% input$domain_filter, , drop = FALSE]
+    }
+    if (!is.null(input$subdomain_filter) && length(input$subdomain_filter) > 0) {
+      df <- df[df$sub_domain %in% input$subdomain_filter, , drop = FALSE]
+    }
+    if (!is.null(input$source_filter) && length(input$source_filter) > 0) {
+      df <- df[df$source %in% input$source_filter, , drop = FALSE]
+    }
+    if (!is.null(input$table_name_filter) && length(input$table_name_filter) > 0) {
+      df <- df[df$table_name %in% input$table_name_filter, , drop = FALSE]
+    }
+    if (!is.null(input$has_branching_logic_filter) && length(input$has_branching_logic_filter) > 0) {
+      df <- df[df$has_skip_logic %in% input$has_branching_logic_filter, , drop = FALSE]
+    }
+    if (!is.null(input$sensitivity_filter) && length(input$sensitivity_filter) > 0) {
       df <- df[df$sensitivity %in% input$sensitivity_filter, , drop = FALSE]
     }
-    if(!is.null(input$informant_filter) && length(input$informant_filter > 0)){
-      df <- df[df$informant %in% input$informant_filter, , drop = FALSE]
-    }
-    if(!is.null(input$plab_facet_filter) && length(input$plab_facet_filter > 0)){
+    if (!is.null(input$plab_facet_filter) && length(input$plab_facet_filter) > 0) {
       df <- df[df$plab_facet %in% input$plab_facet_filter, , drop = FALSE]
     }
-    if(!is.null(input$plab_subfacet_filter) && length(input$plab_subfacet_filter > 0)){
+    if (!is.null(input$plab_subfacet_filter) && length(input$plab_subfacet_filter) > 0) {
       df <- df[df$plab_subfacet %in% input$plab_subfacet_filter, , drop = FALSE]
     }
-    if(!is.null(input$alexsa_facet_filter) && length(input$alexsa_facet_filter > 0)){
+    if (!is.null(input$alexsa_facet_filter) && length(input$alexsa_facet_filter) > 0) {
       df <- df[df$alexsa_facet %in% input$alexsa_facet_filter, , drop = FALSE]
     }
-    if(!is.null(input$alexsa_facet_secondary_filter) && length(input$alexsa_facet_secondary_filter > 0)){
-      df <- df[df$alexsa_facet_secondary %in% input$alexsa_facet_secondary_filter, , drop = FALSE]
-    }
+    
     return(df)
     
   })
   # render filtered datatable
   output$table <- renderDT({datatable(filtered_data(), 
-                                      options = list(pageLength = 10))})
+                                      options = list(pageLength = 10),
+                                      rownames = FALSE)
+    })
 }
 shinyApp(ui = ui, server = server)
