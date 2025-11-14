@@ -4,4 +4,4 @@ title: "Pelham Lab Screener Documentation"
 
 ## Welcome
 
-This is the website for navigating the Pelham Lab Screener Dataset, a tool for building screeners with the Adolescent Brain Cognitive Development (ABCD) study dataset.
+This is the website for navigating the Pelham Lab Predictive Screening Tools Metadata, a tool for building predictive screening tools with the Adolescent Brain Cognitive Development (ABCD) study dataset.

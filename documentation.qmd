@@ -46,7 +46,7 @@ The condition column in metadata-xvars encompasses the entirety of the condition
 
 ![](images/label.png)
 
-For example, here we can see that the condition column (right column) indicates that these items have skip logic where the associated variables – questions about what race(s) the informant identifies as – are only presented to respondents if their response to "event_name" was coded as 11.
+For example, here we can see that the condition column (right column) indicates that these items have skip logic where the associated variables -- questions about what race(s) the informant identifies as -- are only presented to respondents if their response to "event_name" was coded as 11.
 
 ## has_skip_logic
 
@@ -60,17 +60,17 @@ While all of the variables in ABCD are of clinical importance, not all of them a
 
 ![](images/type-item-vs-na.png)
 
-Here we can see that questions about English fluency and multilingualism are applicable to a general audience, but that questions narrowing in on these previous questions, such as questions about dialects and frequency of non-English language use are not questions that can be presented to a general audience without first being primed with another question about the topic – making their inclusion in a screener highly infeasible. **workshop to make more concise**
+Here we can see that questions about English fluency and multilingualism are applicable to a general audience, but that questions narrowing in on these previous questions, such as questions about dialects and frequency of non-English language use are not questions that can be presented to a general audience without first being primed with another question about the topic -- making their inclusion in a screener highly infeasible. **workshop to make more concise**
 
 ![](images/type.png){width="161"}
 
-Therefore, the type column helps us sort by which variables are items that can be included on a questionnaire – item – and which variables are not – score_from_item or N/A.
+Therefore, the type column helps us sort by which variables are items that can be included on a questionnaire -- item -- and which variables are not -- score_from_item or N/A.
 
 ![](images/filter-by-type.png){width="400"}
 
 If you are interested in navigating only by item or navigating other types of variables, there is an option to filter the metadata spreadsheet by type.
 
-## sensitivity – come back when review finalized
+## sensitivity -- come back when review finalized
 
 ## informant
 
@@ -120,7 +120,7 @@ The alexsa_facet utilizes the subscales from the Assessment of Liability and EXp
 
 ![](images/alexsa-facet.png){width="243"}
 
-Items presented in the original ALEXSA assessment fell into one of 34 unique subscales – all of which are domains in the alexsa_facet. At least two lab members were involved in sorting items and reviewing their placement into specific subscales within the alexsa_facet.
+Items presented in the original ALEXSA assessment fell into one of 34 unique subscales -- all of which are domains in the alexsa_facet. At least two lab members were involved in sorting items and reviewing their placement into specific subscales within the alexsa_facet.
 
 ![](images/filter-by-alexsa-facet-01.png){width="313"}
 

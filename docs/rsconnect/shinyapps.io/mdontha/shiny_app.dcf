@@ -5,6 +5,8 @@ account: mdontha
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13860338
-bundleId: 9731057
+bundleId: 11180688
 url: https://mdontha.shinyapps.io/shiny_app/
 version: 1
+asMultiple: FALSE
+asStatic: FALSE
