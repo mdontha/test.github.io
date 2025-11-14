@@ -8,7 +8,7 @@ suppressWarnings({
     
     # load csv file
     # path_to_metadata_xvars is in _paths (output csv from abcd-itembuild)
-    metadata.xvars <- read.csv(path_to_metadata_xvars) # completed metadata from itembuild (only items)
+    metadata.xvars <- read.csv("metadata-ABCD-items.csv") # completed metadata from itembuild (only items)
   }) 
 })
 
@@ -58,11 +58,11 @@ ui <- fluidPage(
       selectizeInput("plab_subfacet_filter", "Select Pelham Lab Subfacet:", choices = NULL, selected = NULL, multiple = TRUE, 
                      options = list(placeholder = "Choose a Pelham Lab Facet first")),
       selectizeInput("alexsa_facet_filter", "Select ALEXSA Facet:", choices = NULL, selected = NULL, multiple = TRUE)
-      ),
+    ),
     mainPanel(DTOutput("table")
-              )
-            )
-          )
+    )
+  )
+)
 # server
 server <- function(input, output, session){
   facet_map <- lapply(facet_map, function(x) {
@@ -102,9 +102,9 @@ server <- function(input, output, session){
     updateSelectizeInput(session, "has_branching_logic_filter", choices = unique(na.omit(metadata.xvars$has_skip_logic)),
                          selected = character(0))
     updateSelectizeInput(session, "sensitivity_filter", choices = unique(na.omit(metadata.xvars$sensitivity)),
-                      selected = character(0))
+                         selected = character(0))
     updateSelectizeInput(session, "alexsa_facet_filter", choices = unique(na.omit(metadata.xvars$alexsa_facet)),
-                      selected = character(0))
+                         selected = character(0))
     
     # ----- use facet_map directly for plab_facet choices ---
     updateSelectizeInput(session, "plab_facet_filter",
@@ -115,7 +115,7 @@ server <- function(input, output, session){
     updateSelectizeInput(session, "plab_subfacet_filter",
                          choices = character(0),
                          selected = character(0))
-    })
+  })
   # domain --> subdomain (intersection behavior)
   observeEvent(input$domain_filter, {
     if (isTRUE(rv$updating_domain)) return()
@@ -184,7 +184,7 @@ server <- function(input, output, session){
     updateSelectizeInput(session, "domain_filter", choices = new_domains, selected = preserved)
     rv$updating_domain <- FALSE
   }, ignoreNULL = FALSE)
-    
+  
   # --- update subfacet choices when facet seletion changes using facet_map
   observeEvent(input$plab_facet_filter, {
     sel_facets <- input$plab_facet_filter
@@ -256,6 +256,6 @@ server <- function(input, output, session){
   output$table <- renderDT({datatable(filtered_data(), 
                                       options = list(pageLength = 10),
                                       rownames = FALSE)
-    })
+  })
 }
 shinyApp(ui = ui, server = server)
