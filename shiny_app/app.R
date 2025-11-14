@@ -7,7 +7,8 @@ suppressWarnings({
     library(DT)
     
     # load csv file
-    metadata.xvars <- read.csv(path_to_metadata_xvars) 
+    # path_to_metadata_xvars is in _paths (output csv from abcd-itembuild)
+    metadata.xvars <- read.csv(path_to_metadata_xvars) # completed metadata from itembuild (only items)
   }) 
 })
 
@@ -56,7 +57,8 @@ ui <- fluidPage(
       selectizeInput("plab_facet_filter", "Select Pelham Lab Facet:", choices = NULL, selected = NULL, multiple = TRUE),
       selectizeInput("plab_subfacet_filter", "Select Pelham Lab Subfacet:", choices = NULL, selected = NULL, multiple = TRUE, 
                      options = list(placeholder = "Choose a Pelham Lab Facet first")),
-      selectizeInput("alexsa_facet_filter", "Select ALEXSA Facet:", choices = NULL, selected = NULL, multiple = TRUE)),
+      selectizeInput("alexsa_facet_filter", "Select ALEXSA Facet:", choices = NULL, selected = NULL, multiple = TRUE)
+      ),
     mainPanel(DTOutput("table")
               )
             )
@@ -67,15 +69,32 @@ server <- function(input, output, session){
     if (is.null(x)) return(character(0))
     as.character(x)
   })
+  # build domain mapping with subdomain
+  domain_map <- metadata.xvars %>% 
+    filter(!is.na(domain) & !is.na(sub_domain)) %>% 
+    distinct(domain, sub_domain) %>% 
+    group_by(domain) %>% 
+    summarise(subs = list(sort(unique(sub_domain))), .groups = "drop") %>% 
+    deframe()
   
+  # build inverse subdomain map to make it easy to find domains that contain a given subdomain
+  subdomain_to_domains <- list()
+  for (d in names(domain_map)) {
+    for (s in domain_map[[d]]) {
+      subdomain_to_domains[[s]] <- unique(c(subdomain_to_domains[[s]], d))
+    }
+  }
+  rv <- reactiveValues(updating_domain = FALSE, updating_subdomain = FALSE)
   # update dropdown choices
   observe({
     updateSelectizeInput(session, "study_filter", choices = unique(na.omit(metadata.xvars$study)),
                          selected = character(0))
+    # populate domain and subdomain with ALL options initially
     updateSelectizeInput(session, "domain_filter", choices = unique(na.omit(metadata.xvars$domain)),
                          selected = character(0))
     updateSelectizeInput(session, "subdomain_filter", choices = unique(na.omit(metadata.xvars$sub_domain)),
                          selected = character(0))
+    
     updateSelectizeInput(session, "source_filter", choices = unique(na.omit(metadata.xvars$source)),
                          selected = character(0))
     updateSelectizeInput(session, "table_name_filter", choices = unique(na.omit(metadata.xvars$table_name)),
@@ -97,7 +116,75 @@ server <- function(input, output, session){
                          choices = character(0),
                          selected = character(0))
     })
+  # domain --> subdomain (intersection behavior)
+  observeEvent(input$domain_filter, {
+    if (isTRUE(rv$updating_domain)) return()
+    
+    sel_domains <- input$domain_filter
+    if (is.null(sel_domains) || length(sel_domains) == 0) {
+      # show all subdomains when no domain selected
+      rv$updating_subdomain <- TRUE
+      updateSelectizeInput(session, "subdomain_filter", choices = sort(unique(na.omit(metadata.xvars$sub_domain))), selected = character(0))
+      rv$updating_subdomain <- FALSE
+      return()
+    }
+    
+    matched <- domain_map[ intersect(names(domain_map), sel_domains) ]
+    # intersection of subdomains across selected domains
+    if (length(matched) == 0) {
+      new_choices <- character(0)
+    } else if (length(matched) == 1) {
+      new_choices <- matched[[1]]
+    } else {
+      new_choices <- Reduce(intersect, matched)
+    }
+    new_choices <- sort(unique(new_choices))
+    
+    # preserve current selections that remain valid
+    current_sel <- isolate(input$subdomain_filter)
+    preserved <- if (!is.null(current_sel)) intersect(current_sel, new_choices) else character(0)
+    
+    rv$updating_subdomain <- TRUE
+    updateSelectizeInput(session, "subdomain_filter", choices = new_choices, selected = preserved)
+    rv$updating_subdomain <- FALSE
+  }, ignoreNULL = FALSE)
   
+  
+  # subdomain --> domain unification
+  observeEvent(input$subdomain_filter, {
+    if (isTRUE(rv$updating_subdomain)) return()
+    
+    
+    sel_subs <- input$subdomain_filter
+    if (is.null(sel_subs) || length(sel_subs) == 0) {
+      # show all domains when no subdomain selected
+      rv$updating_domain <- TRUE
+      updateSelectizeInput(session, "domain_filter", choices = sort(unique(na.omit(metadata.xvars$domain))), 
+                           selected = character(0))
+      rv$updating_domain <- FALSE
+      return()
+    }
+    
+    # gather domains that contain any of the selected subdomains (union)
+    matched_domains <- subdomain_to_domains[ intersect(names(subdomain_to_domains), sel_subs) ]
+    # intersection across selected subdomains
+    if (length(matched_domains) == 0) {
+      new_domains <- character(0)
+    } else if (length(matched_domains) == 1) {
+      new_domains <- matched_domains[[1]]
+    } else {
+      new_domains <- Reduce(intersect, matched_domains)
+    }
+    new_domains <- sort(unique(new_domains))
+    
+    current_sel <- isolate(input$domain_filter)
+    preserved <- if (!is.null(current_sel)) intersect(current_sel, new_domains) else character(0)
+    
+    rv$updating_domain <- TRUE
+    updateSelectizeInput(session, "domain_filter", choices = new_domains, selected = preserved)
+    rv$updating_domain <- FALSE
+  }, ignoreNULL = FALSE)
+    
   # --- update subfacet choices when facet seletion changes using facet_map
   observeEvent(input$plab_facet_filter, {
     sel_facets <- input$plab_facet_filter
