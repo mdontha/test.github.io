@@ -6,11 +6,14 @@ website:
   title: "Pelham Lab's Screener Creation Tools"
   navbar:
     left:
-      - href: index.qmd
+      - file: index.qmd
         text: Home
-      - about.qmd
-      - metadata-download.qmd
-      - documentation.qmd
+      - file: about.qmd
+        text: About
+      - file: metadata-download.qmd
+        text: Metadata Download
+      - file: documentation.qmd
+        text: Documentation
 
 format:
   html:
